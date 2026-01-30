@@ -63,6 +63,32 @@ export interface Startup {
   updated_at?: string;
 }
 
+export type EscrowGrant = {
+  id: string;
+  title: string;
+  description: string;
+  founder_name: string;
+  founder_email: string;
+  funder_name: string;
+  funder_email: string;
+  total_amount: number;
+  total_milestones: number;
+  currency: string;
+  milestones: Milestone[];
+  wallet_address: string;
+  terms_accepted: boolean;
+  status: 'pending' | 'approved' | 'rejected';
+  created_at: string;
+  updated_at: string;
+  user_id: string;
+}
+export interface UserTag {
+  id: string;
+  user_id: string;
+  tag: string;
+  created_at: string;
+}
+
 export type EscrowGrantRequest = {
   id: string;
   title: string;
@@ -81,7 +107,7 @@ export type EscrowGrantRequest = {
   created_at: string;
   updated_at: string;
   user_id: string;
-};
+}
 
 export type Milestone = {
   id: string;
@@ -92,9 +118,3 @@ export type Milestone = {
   deliverables: string[];
 };
 
-export interface UserTag {
-  id: string;
-  user_id: string;
-  tag: string;
-  created_at: string;
-}
