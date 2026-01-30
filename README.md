@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Welcome to your Lovable project
 
 ## Project info
@@ -71,3 +72,7 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+=======
+# CIH3.0_TeamHawks
+This is the repository of Team Hawks for Central India Hackathon.
+>>>>>>> bea62c9c2efa942a13c5fbd9e379ac65f742d8fb
