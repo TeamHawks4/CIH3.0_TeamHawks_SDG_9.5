@@ -21,5 +21,5 @@ In your platform, AI Matchmaking connects innovators (researchers/startups) with
 
 # CIH3.0_TeamHawks
 This is the repository of Team Hawks for Central India Hackathon.
- 
->>>>>>> 144a357e1e850790c60472ac6daa2fc37415af3d
+
+
