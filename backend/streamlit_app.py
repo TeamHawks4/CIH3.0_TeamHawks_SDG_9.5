@@ -229,3 +229,76 @@ else:
                                 st.error("❌ Investment failed")
 
                 st.markdown("</div>", unsafe_allow_html=True)
+                
+st.markdown(
+    """
+    <style>
+    /* FORCE chatbot above Streamlit sidebar */
+    iframe, section, div {
+        z-index: auto;
+    }
+
+    /* Chatbot container */
+    #chatbot-container {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        width: 320px;
+        height: 420px;
+        background: #020617;
+        border-radius: 14px;
+        border: 1px solid #1e293b;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.75);
+        z-index: 2147483647 !important; /* MAX z-index */
+        display: none;
+        overflow: hidden;
+        pointer-events: auto;
+    }
+
+    /* Toggle button */
+    #chatbot-toggle {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        width: 56px;
+        height: 56px;
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+        color: white;
+        border-radius: 50%;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.45);
+        z-index: 2147483647 !important;
+        transition: transform 0.2s ease;
+    }
+
+    #chatbot-toggle:hover {
+        transform: scale(1.08);
+    }
+    </style>
+
+    <button id="chatbot-toggle" title="AI Assistant">💬</button>
+
+    <div id="chatbot-container">
+        <script src="https://www.noupe.com/embed/019c11c941047ef5bdb7270f2ae4114dfd1d.js"></script>
+    </div>
+
+    <script>
+    const toggleBtn = document.getElementById("chatbot-toggle");
+    const chatbot = document.getElementById("chatbot-container");
+
+    const isOpen = localStorage.getItem("chatbot_open") === "true";
+    chatbot.style.display = isOpen ? "block" : "none";
+    toggleBtn.innerHTML = isOpen ? "✖" : "💬";
+
+    toggleBtn.addEventListener("click", () => {
+        const open = chatbot.style.display === "none";
+        chatbot.style.display = open ? "block" : "none";
+        toggleBtn.innerHTML = open ? "✖" : "💬";
+        localStorage.setItem("chatbot_open", open);
+    });
+    </script>
+    """,
+    unsafe_allow_html=True
+)
