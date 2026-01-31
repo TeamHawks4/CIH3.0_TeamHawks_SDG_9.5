@@ -114,9 +114,27 @@ else:
                         st.write(f"Valuation: ${s['valuation']:,} | Growth: {s['growth_rate_cent']}%")
                         st.progress(s.get("match_score", 0), text=f"Match Score: {s.get('match_score', 0):.2f}")
                     with c2:
-                        if st.button("Invest", key=s["startup_id"]):
-                            inv_res = requests.post(f"{API}/invest/trigger", json={
-                                "investor_id": st.session_state["user_id"], # Using user_id as investor_id for simplicity
-                                "startup_id": s["startup_id"]
-                            })
-                            st.success(f"Tx: {inv_res.json()['tx_hash'][:10]}...")
+                        if st.button("Invest", key=f"invest_{s['startup_id']}"):
+                            with st.spinner("Processing investment..."):
+                                try:
+                                    inv_res = requests.post(
+                                        f"{API}/invest/trigger",
+                                        json={
+                                            "investor_id": st.session_state["user_id"],
+                                            "startup_id": s["startup_id"]
+                                        },
+                                        timeout=5
+                                    )
+
+                                    # 🔍 Always inspect response
+                                    if inv_res.status_code == 200:
+                                        data = inv_res.json()
+                                        st.success(f"✅ Investment successful!\nTx: {data['tx_hash'][:10]}...")
+                                    else:
+                                        st.error(f"❌ Backend error {inv_res.status_code}")
+                                        st.code(inv_res.text)
+
+                                except Exception as e:
+                                    st.error("❌ Could not reach backend")
+                                    st.exception(e)
+

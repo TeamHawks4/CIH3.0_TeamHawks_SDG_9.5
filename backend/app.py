@@ -187,20 +187,44 @@ def recommend():
 @app.route("/invest/trigger", methods=["POST"])
 def trigger_investment():
     data = request.json
-    # Call Web3 logic
-    tx_hash = invest_on_chain(data["startup_id"], data["investor_id"])
-    
-    # Record in DB
+
+    # 🔹 Validate input
+    startup_id = data.get("startup_id")
+    investor_id = data.get("investor_id")
+
+    if not startup_id or not investor_id:
+        return jsonify({"error": "Missing startup_id or investor_id"}), 400
+
+    # 🔹 Check if investor exists
+    investor = supabase.table("investors").select("*").eq("investor_id", investor_id).execute()
+    if not investor.data or len(investor.data) == 0:
+        return jsonify({"error": "Investor profile not found"}), 404
+
+    # 🔹 Mock blockchain interaction
+    tx_hash = invest_on_chain(startup_id, investor_id)
+    if not tx_hash:
+        return jsonify({"error": "Blockchain transaction failed"}), 500
+
+    # 🔹 Prepare DB record
     investment_record = {
         "investment_id": str(uuid.uuid4()),
-        "investor_id": data["investor_id"],
-        "startup_id": data["startup_id"],
+        "investor_id": investor_id,
+        "startup_id": startup_id,
         "tx_hash": tx_hash,
         "status": "Success"
     }
-    supabase.table("investments").insert(investment_record).execute()
+
+    # 🔹 Insert into DB safely
+    try:
+        supabase.table("investments").insert(investment_record).execute()
+    except Exception as e:
+        return jsonify({"error": f"Database insertion failed: {e}"}), 500
+
+    return jsonify({
+        "message": "Investment recorded successfully",
+        "tx_hash": tx_hash
+    })
     
-    return jsonify({"message": "Investment recorded on blockchain", "tx_hash": tx_hash})
 
 if __name__ == "__main__":
     app.run(debug=True)
